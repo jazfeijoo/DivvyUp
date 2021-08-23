@@ -9,6 +9,7 @@ npm-debug.*
 *.orig.*
 web-build/
 secret.js
-
+divvyup-323411-368b4bc139bb.json
+package-lock.json
 # macOS
 .DS_Store

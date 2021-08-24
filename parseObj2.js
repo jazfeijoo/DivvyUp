@@ -15,4 +15,13 @@ let imgFullTextPages = imgMainFullText['pages'] //array with 1 obj
 let imgFullTextPagesObj = imgMainFullText['pages'][0] //keys: [ 'property', 'width', 'height', 'blocks' ]
 let imgFullTextString = imgMainFullText['text']
 let receiptTextArray = imgFullTextString.split('\n')
-console.log('GOOGLE OUTPUT 2: ', imgMainTextMapBounds) 
+
+function parseImg(gcp){
+    let receipt = {}
+    const main = gcp[0]
+    const mainText = main['textAnnotations']
+    const mainTextMap = mainText[0] 
+    console.log('RECEIPT 2: ',mainTextMap);
+    return receipt;
+}
+

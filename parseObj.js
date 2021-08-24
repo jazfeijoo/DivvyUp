@@ -30,8 +30,8 @@ let imgFullTextPagesObj = imgMainFullText['pages'][0]
 //FULLTEXT OBJ,TEXT KEY/VALUE: string text results!!!!!!!
 let imgFullTextString = imgMainFullText['text']
 let receiptTextArray = imgFullTextString.split('\n')
-
- console.log('GOOGLE OUTPUT 1: ', (desc(47)) ,vert(47), desc(48), vert(48), vert(49), desc(49), vert(50),'item 2:',vert(51),vert(52),vert(53))
+console.log('full TEXT:', receiptTextArray)
+//  console.log('GOOGLE OUTPUT 1: ', (desc(47)) ,vert(47), desc(48), vert(48), vert(49), desc(49), vert(50),'item 2:',vert(51),vert(52),vert(53))
 
 //HOW TO ASSIGN KEY NAME TO KEY/VALUE WITH NO KEY NAME:
 // var x = {};
@@ -45,53 +45,37 @@ function parseImg(gcp){
     const main = gcp[0]
     const mainText = main['textAnnotations']
     const mainTextMap = mainText[0] 
-    const mainTextVerticesArr = mainTextMap['boundingPoly']['vertices']
-    const receiptPerimeter = findMinMax(mainTextVerticesArr) // RECEIPT mainBounds: ['minX'],['midX'],['maxX'],['minY'], ['maxY']
-    //IDENTIFY BY LETTER SIZE (Ymax- Ymin):
-    const letterSizeMap = letterHeight(mainText)
-    const letterSizeMain =  findLetterSizeMain(letterSizeMap)
-    const largestLetter =  letterSizeMain.maxSize
-    const indexOfLargestLetter = largestLetter[Object.keys(largestLetter)]['indexes']
-    const titleFirstObj = findByLetterIndex(mainText, indexOfLargestLetter)
-    const mostFreqLetterSize =  letterSizeMain.mostFreq
-    const indexesOfMostFreqSize = mostFreqLetterSize[Object.keys(mostFreqLetterSize)]['indexes']
-    const mostFreqObjs = findByLetterIndex(mainText, indexesOfMostFreqSize)
-    //IDENTIFY BY X-AXIS START: 
+    const arrReceipt = mainText.splice(0,1)
+    // const mainTextVerticesArr = mainTextMap['boundingPoly']['vertices']
+    // const receiptPerimeter = findMinMax(mainTextVerticesArr) // RECEIPT mainBounds: ['minX'],['midX'],
 
-    function findByLine(mainText){
-        let objByLine= {}
-        for(let i=1; i< mainText.length; i++){
-            let currObj = mainText[i]
-            let currDesc = currObj['description']
-            let currVert = currObj['boundingPoly']['vertices']
-            const currBounds = findMinMax(currVert)
-             let currLine = currBounds['minY']
-                if(objByLine[currLine]){
-                     objByLine[currLine].push(currObj)
-                 } else {
-                     objByLine[currLine] = [currObj]
-                 }
-        }
-        return objByLine
-    } 
-    const sameLine = findByLine(mainText)
-    console.log(sameLine)
-
-    return receipt;
+     const textSize = findTextHeight(arrReceipt)
+     const textSizeMax =  findLetterSizeMax(textSize)
+     function findBusinessName(arrReceipt,textSizeMax){
+        console.log(textSizeMax)
+     }
+     const businessName = findBusinessName(arrReceipt,textSizeMax)
+     console.log(businessName)
+     return receipt;
+    //  const largestText =  textSizeMax.maxSize
+    //  const indexOfLargestLetter = largestText[Object.keys(largestText)]['indexes']
+    // const titleFirstObj = findByLetterIndex(mainText, indexOfLargestLetter)
+    // const mostFreqLetterSize =  letterSizeMain.mostFreq
+    // const indexesOfMostFreqSize = mostFreqLetterSize[Object.keys(mostFreqLetterSize)]['indexes']
+    // const mostFreqObjs = findByLetterIndex(mainText, indexesOfMostFreqSize)
+    // const sameLine = findByLine(mainText)
 }
 
 //HELPER FUNCS: 
-
-//APPLIED TO RECEIPT AND TEXT LEVEL: 
-//FINDING MIN/MAX X/Y OF TOTAL PERIMETER 
-function findMinMax(mainTextVerticesArr){
+//FROM ARRAY OF OBJECTS, FIND MIN/MAX X & Y COORDINATES:  
+function findMinMax(arrOfObj){
     let minX = 0
     let maxX = 0
     let midX = 0
     let minY = 0
     let maxY = 0
-    for (let i=0; i<mainTextVerticesArr.length;i++){
-        let currXY = mainTextVerticesArr[i]
+    for (let i=0; i<arrOfObj.length;i++){
+        let currXY = arrOfObj[i]
         let currX = currXY['x']
         let currY = currXY['y']
         if (minX === 0 || currX < maxX) {
@@ -100,13 +84,11 @@ function findMinMax(mainTextVerticesArr){
         if( minX < currX){
             maxX = currX
         }
-        //
         if (minY === 0) {
             minY = currY
         } 
         if( minY < currY && maxY < currY){
-                maxY = currY
-            
+                maxY = currY  
         }
     }
     midX = minX + ((maxX-minX)/2)
@@ -115,27 +97,28 @@ function findMinMax(mainTextVerticesArr){
 
 //APPLIED TO RECEIPT LEVEL:
 //MAP OF LENGTHS OF Y (aka text size) AND their fequency: 
-function letterHeight(mainText){
-    let letterHeight= {}
+function findTextHeight(mainText){
+    let textHeight= {}
     for(let i=1; i< mainText.length; i++){
         let currObj = mainText[i]
         let currDesc = currObj['description']
         let currVert = currObj['boundingPoly']['vertices']
         const currBounds = findMinMax(currVert)
         let currYdiff = currBounds['maxY'] - currBounds['minY']
-        if(letterHeight[currYdiff]){
-            letterHeight[currYdiff]['freq'] ++
-            letterHeight[currYdiff]['indexes'].push(i)
+        if(textHeight[currYdiff]){
+            textHeight[currYdiff]['freq'] ++
+            textHeight[currYdiff]['indexes'].push(i)
         } else {
-            letterHeight[currYdiff] = {'freq': 1, 'indexes': [i]} 
+            textHeight[currYdiff] = {'freq': 1, 'indexes': [i]} 
         }
     }
-    return letterHeight
+    return textHeight
 } 
+
 
 //AFTER CALCULATING MAP OF LENGTHS OF Y (aka text height/size), FIND THE sizes of interest and their indexes (locations)
 //SIZES OF INTEREST: largest = title of place/business, most frequent = most listed text aka the ITEMS!
-function findLetterSizeMain(letterSizeMap){
+function findLetterSizeMax(letterSizeMap){
     let maxSize = 0 
     let mostFreq = 0
     let mostFreqKey
@@ -158,20 +141,40 @@ function findLetterSizeMain(letterSizeMap){
     }
 }
 
-//FIND/RETURN ALL OBJECTS THAT BELONG TO MOST FREQUENT LETTER SIZE:
-function findByLetterIndex(mainText, indexesOfMostFreqSize){
-    let mostFreq = []
-    for (let i= 0; i < indexesOfMostFreqSize.length; i++){
-        let currIndex = indexesOfMostFreqSize[i]
-        let currObj = mainText[currIndex]
-        console.log()
-        mostFreq.push(currObj)
-    }
-    return mostFreq
-}
+
+parseImg(gcpOutput1);
+
+
+
+
+
+
+// //FIND/RETURN ALL OBJECTS THAT BELONG TO MOST FREQUENT LETTER SIZE:
+// function findByLetterIndex(mainText, indexesOfMostFreqSize){
+//     let mostFreq = []
+//     for (let i= 0; i < indexesOfMostFreqSize.length; i++){
+//         let currIndex = indexesOfMostFreqSize[i]
+//         let currObj = mainText[currIndex]
+//         mostFreq.push(currObj)
+//     }
+//     return mostFreq
+// }
 
 //APPLIED TO RECEIPT LEVEL:
 //MAP OF LOCATIONS OF Ystart (aka all items on SAME LINE)
-
-
-parseImg(gcpOutput1);
+// function findByLine(mainText){
+//     let objByLine= {}
+//     for(let i=1; i< mainText.length; i++){
+//         let currObj = mainText[i]
+//         let currDesc = currObj['description']
+//         let currVert = currObj['boundingPoly']['vertices']
+//         const currBounds = findMinMax(currVert)
+//          let currLine = currBounds['minY']
+//             if(objByLine[currLine]){
+//                  objByLine[currLine].push(currObj)
+//              } else {
+//                  objByLine[currLine] = [currObj]
+//              }
+//     }
+//     return objByLine
+// } 

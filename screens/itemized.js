@@ -1,5 +1,5 @@
 // AN Note: Import React from React.
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useRef} from 'react';
 // Importing items from react native to be used in my screen.
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 // Importing my receipt parser function to use when someone navigates to this page.
@@ -10,28 +10,29 @@ import {DataTable, Button} from 'react-native-paper';
 import firebase from '../config/firebase';
 // Initiating firestore?  Ask Jazmin for clarity/should we do this in a separate file/move to config?
 const firestore = firebase.firestore();
-// Per Jazz, importing authenticated user and authenticated user context.
+// Importing authenticated user and authenticated user context.
 import {auth} from '../config/firebase';
 import {AuthenticatedUserContext} from '../navigation/AuthenticatedUserProvider';
 
 import { db } from '../config/firebase';
 
 const Itemized = ({route, navigation}) => {
-  const {container, bottom} = styles;
+  const {container, bottom, button} = styles;
   const {receiptData} = route.params;
   // This is my parsed receipt.
   let parsedData = receiptParser(receiptData.responses);
-  // Per Jazz, setting user object.
+  // Setting user object.
   const {user} = useContext(AuthenticatedUserContext)
     ? useContext(AuthenticatedUserContext)
     : 'NO USER!';
   // Here I'm using useState, changing the names of my items to the same naming convention as Jazz.
   const [receipt, setReceipt] = useState(parsedData);
+  const acceptedReceipt = useRef(null);
 
   // console.log(receipt);
   const [receiptId, setReceiptId] = useState('');
 
-  //   This will display the items on the screen if receiptdata was properly parsed.
+  //   AN: This will display the items on the screen if receiptdata was properly parsed.
   const displayItemized = () => {
     if (receiptData === null) {
       return null;
@@ -61,7 +62,10 @@ const Itemized = ({route, navigation}) => {
   // AN's Accept Button
   const acceptButton = () => {
     return (
-      <Button onPress={() => acceptButtonFunctionality()} mode="contained">
+      <Button
+        style={button}
+        onPress={() => acceptButtonFunctionality()}
+        mode="contained">
         <Text>Accept</Text>
       </Button>
     );
@@ -69,24 +73,23 @@ const Itemized = ({route, navigation}) => {
   // AN's Edit Button
   const editButton = () => {
     return (
-      <Button onPress={() => editButtonFunctionality()} mode="contained">
+      <Button
+        style={button}
+        onPress={() => editButtonFunctionality()}
+        mode="contained">
         <Text>Edit</Text>
       </Button>
     );
-  };
+  }
 
+<<<<<<< HEAD
   // Integrating Jazz's function to send the receipt back to the firestore.
   const submitReceipt = async () => {
-    const submittedReceipt = await db
-    .collection('receipts')
-    .add({
-      ...receipt,
+    const submittedReceipt = await firestore.collection('receipts').add({
+      ...acceptedReceipt.current,
       charger: `${user.uid}`,
-      createdAt : firebase.firestore.FieldValue.serverTimestamp()
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
-    // return firestore
-    //   .collection('receipts')
-    //   .add({receipt: {...receipt, charger: `${user.uid}`}});
 
     setReceiptId(submittedReceipt.id);
     console.log(receiptId);
@@ -107,7 +110,10 @@ const Itemized = ({route, navigation}) => {
     cleanReceipt.items = items;
     // AN set receipt state to clean receipt.
     setReceipt(cleanReceipt);
-    // Submit clean receipt to firestore with Jazz's function.
+    // Submit clean receipt to firestore with Jo's function.
+    // We need to use useRef here since this isn't getting rendered to the screen.
+    // If we don't, the uncleaned receipt will be sent back to the db instead of the clean one.
+    acceptedReceipt.current = cleanReceipt;
     submitReceipt();
   };
 
@@ -116,9 +122,25 @@ const Itemized = ({route, navigation}) => {
     // Need to add navigation to Margareth's screen here.
   };
 
+  const convertDataToCleanObject = () => {
+    let cleanReceipt = {};
+    let items = [];
+    parsedData.forEach(itemObject => {
+      let obj = {};
+      let description = itemObject.words.join(' ');
+      obj.description = description;
+      obj.price = itemObject.price;
+      items.push(obj);
+    });
+    cleanReceipt.items = items;
+    // AN set receipt state to clean receipt.
+    setReceipt(cleanReceipt);
+    return cleanReceipt
+  };
+
   const editButtonFunctionality = () => {
-    // convertDataToCleanObjectAndSubmitToFirestore();
-    // Need to add navigation to Jazz's edit screen here.
+    const receipt = convertDataToCleanObject();
+    navigation.navigate('EditReceipt', {receipt})
   };
 
   //   AN: This is what will be displayed on the screen.  Using react native paper because it's cute.
@@ -156,5 +178,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     justifyContent: 'space-between',
     flexDirection: 'row',
+  },
+  button: {
+    backgroundColor: 'rgb(227, 100, 20)',
   },
 });

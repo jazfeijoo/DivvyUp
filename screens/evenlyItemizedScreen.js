@@ -35,10 +35,14 @@ function evenlyItemizedScreen({route, navigation}) {
 
       const data = query.data();
 
+      // o: you can lowercase all description and match on that instead 😉
       totalPrice = data.items.find(({description}) => description === 'total' || description === 'TOTAL' || description === 'Total');
       let ppCharge =  splitFunctionality()
       
+      // o: walk me thru this logic
       const chargees = new Array(Number(numPeople.current)).fill({name: 'chargee', amountOwed: ppCharge});
+
+      // o: create constants with all the screens so the compiler can catch the spelling errors  
       navigation.navigate('AmountOwed', {chargeesProp: chargees, id: id});
     }
 

@@ -86,6 +86,7 @@ const Itemized = ({route, navigation}) => {
   const convertDataToCleanObjectAndSubmitToFirestore = () => {
     let cleanReceipt = {};
     let items = [];
+
     parsedData.forEach(itemObject => {
       let obj = {};
       let description = itemObject.words.join(' ');
@@ -93,6 +94,7 @@ const Itemized = ({route, navigation}) => {
       obj.price = itemObject.price;
       items.push(obj);
     });
+    
     cleanReceipt.items = items;
     // AN set receipt state to clean receipt.
     setReceipt(cleanReceipt);

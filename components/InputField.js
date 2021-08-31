@@ -16,6 +16,7 @@ const InputField = ({
 }) => {
   return (
     <View style={[styles.container, containerStyle]}>
+      {/* o: is there a situation where the leftIcon doesn't show up 🤔 */}
       {leftIcon ? (
         <MaterialCommunityIcons
           name={leftIcon}
@@ -29,6 +30,7 @@ const InputField = ({
         placeholderTextColor={placeholderTextColor}
         style={[styles.input, inputStyle]}
       />
+      {/* o: is there a situation where the rightIcon doesn't show up 🤔 */}
       {rightIcon ? (
         <TouchableOpacity onPress={handlePasswordVisibility}>
           <MaterialCommunityIcons

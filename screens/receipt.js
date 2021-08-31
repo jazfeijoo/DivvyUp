@@ -9,6 +9,9 @@ import {
   Text,
   View,
 } from 'react-native';
+
+// o: let's talk about comments
+
 // Install expo-image-picker and import into file.
 import * as ImagePicker from 'expo-image-picker';
 // Install expo-camera and import into file.
@@ -117,8 +120,9 @@ const Receipt = ({navigation}) => {
   };
 
   const _maybeRenderViewItemizedDisplay = () => {
+    // o: this reads strangely to me... 🤔
     if (googleResponse === null) {
-      return null;
+      return;
     }
     return (
       <View>
@@ -174,6 +178,7 @@ const Receipt = ({navigation}) => {
       let body = JSON.stringify({
         requests: [
           {
+            // o: I think it's time to remove these comments
             features: [
               // { type: 'LABEL_DETECTION', maxResults: 10 },
               // {type: 'LANDMARK_DETECTION', maxResults: 5},
@@ -216,6 +221,7 @@ const Receipt = ({navigation}) => {
     }
   };
 
+  // o: remember to try and clean this up by end of project
   async function uploadImageAsync(uri) {
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -244,6 +250,7 @@ const Receipt = ({navigation}) => {
       </View>
     );
   } else {
+    // o: remove this else
   }
   return (
     <View style={container}>

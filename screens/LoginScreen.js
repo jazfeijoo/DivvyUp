@@ -69,6 +69,7 @@ export default function Login({navigation}) {
       </View>
     );
   } else {
+    // o: remove else if not needed
   }
   return (
     <View style={container}>

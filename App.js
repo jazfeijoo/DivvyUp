@@ -8,6 +8,7 @@ export default function App() {
   return <Routes />;
 }
 
+// o: maybe it's time to remove???
 // // NOTE TO SELF--ORIGINAL CODE: DO NOT TOUCH UNTIL EVERYTHING'S REFACTORED---------------------------------
 // // AN Note: Using React Navigation to navigate through our app.
 // import {NavigationContainer} from '@react-navigation/native';

@@ -44,6 +44,7 @@ export default function HomeScreen() {
       </View>
     );
   } else {
+    // o: no else?
   }
   return (
     <View style={container}>

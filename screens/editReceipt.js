@@ -85,6 +85,7 @@ export default EditReceipt = ({route, navigation}) => {
     );
   }
 
+  // o: as a suggestion, non-negative conditionals are easier to read
   if (!receipt) {
     return (
       <View>

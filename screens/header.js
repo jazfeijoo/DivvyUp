@@ -15,6 +15,7 @@ const Header = () => {
 
   // If the header font isn't loaded, display text saying header loaded.
   // If fonts are loaded, display the header.
+
   if (!fontsLoaded) {
     return (
       <View>
@@ -22,6 +23,7 @@ const Header = () => {
       </View>
     );
   } else {
+    // o: no else???
   }
   return (
     <View style={header}>

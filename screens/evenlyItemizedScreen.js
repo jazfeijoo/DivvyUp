@@ -2,7 +2,7 @@ import React, {useState, useRef, useContext} from 'react';
 import Header from './header';
 import { db } from '../config/firebase';
 import {AuthenticatedUserContext} from '../navigation/AuthenticatedUserProvider';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import {
     useFonts,
     Lato_100Thin,
@@ -82,6 +82,7 @@ function evenlyItemizedScreen({route, navigation}) {
         )
     }
     return (
+      <TouchableWithoutFeedback onPress={ () => Keyboard.dismiss() }>
         <View style={container}>
         <ImageBackground
           style={img}
@@ -94,7 +95,8 @@ function evenlyItemizedScreen({route, navigation}) {
             <TextInput 
               style={textInput} 
               placeholder="enter number" 
-              onChangeText={tempNumber} 
+              onChangeText={tempNumber}
+              keyboardType="number-pad"
             ></TextInput>
             <View style={button} > 
                 {evenlyButton()}
@@ -102,7 +104,8 @@ function evenlyItemizedScreen({route, navigation}) {
             </View>
         </ImageBackground>
       </View>
-    );5
+    </TouchableWithoutFeedback>  
+    );
 }
 
 export default evenlyItemizedScreen;

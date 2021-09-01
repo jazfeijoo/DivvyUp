@@ -9,9 +9,6 @@ import {DataTable, Button} from 'react-native-paper';
 // Importing firebase per Jazmin's code on sending back the finalized receipt.
 import firebase from '../config/firebase';
 // Initiating firestore?  Ask Jazmin for clarity/should we do this in a separate file/move to config?
-const firestore = firebase.firestore();
-// Importing authenticated user and authenticated user context.
-import {auth} from '../config/firebase';
 import {AuthenticatedUserContext} from '../navigation/AuthenticatedUserProvider';
 
 import { db } from '../config/firebase';
@@ -28,7 +25,6 @@ const Itemized = ({route, navigation}) => {
   // Here I'm using useState, changing the names of my items to the same naming convention as Jazz.
   const [receipt, setReceipt] = useState(parsedData);
   const acceptedReceipt = useRef(null);
-  const [receiptId, setReceiptId] = useState('')
 
   //   AN: This will display the items on the screen if receiptdata was properly parsed.
   const displayItemized = () => {
@@ -72,18 +68,20 @@ const Itemized = ({route, navigation}) => {
   };
 
   // AN Integrating Jo's function to send the receipt back to the firestore.
+
+  let submittedReceipt
   const submitReceipt = async () => {
-    const submittedReceipt = await db.collection('receipts').add({
+    submittedReceipt = await db.collection('receipts').add({
       ...acceptedReceipt.current,
       charger: `${user.uid}`,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
-    setReceiptId(submittedReceipt.id)
+    navigation.navigate('SplitReceipt', {id: submittedReceipt.id})
   }
 
   //   AN's function to massage parsed receipt data in a form that Jazz is expecting.  However, I have no business name.
   //   After parsedReceipt is massaged into a form Jazz is expecting, send it to db.
-  const convertDataToCleanObjectAndSubmitToFirestore = () => {
+  const convertDataToCleanObjectAndSubmitToFirestore = async () => {
     let cleanReceipt = {};
     let items = [];
     parsedData.forEach(itemObject => {
@@ -103,9 +101,8 @@ const Itemized = ({route, navigation}) => {
     submitReceipt();
   };
 
-  const acceptButtonFunctionality = () => {
+  const acceptButtonFunctionality = async () => {
     convertDataToCleanObjectAndSubmitToFirestore();
-    navigation.navigate('SplitReceipt', {id: receiptId})
   };
 
   const convertDataToCleanObject = () => {

@@ -24,7 +24,6 @@ function evenlyItemizedScreen({route, navigation}) {
     const {user} = useContext(AuthenticatedUserContext);
     const { id } = route.params;
 
-
     const chargerId = user.uid;
     const getMostRecent = async () => {
       // Make the initial query
@@ -35,7 +34,8 @@ function evenlyItemizedScreen({route, navigation}) {
 
       const data = query.data();
 
-      totalPrice = data.items.find(({description}) => description === 'total' || description === 'TOTAL' || description === 'Total');
+      totalPrice = data.items.find(
+        ({description}) => description === 'total' || description === 'TOTAL' || description === 'Total');
       let ppCharge =  splitFunctionality()
       
       const chargees = new Array(Number(numPeople.current)).fill({name: 'chargee', amountOwed: ppCharge});

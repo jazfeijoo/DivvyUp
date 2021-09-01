@@ -16,13 +16,14 @@ import {
     Lato_900Black,
     Lato_900Black_Italic,
   } from '@expo-google-fonts/lato';
-import {TextInput, Button} from 'react-native-paper'; 
+import {TextInput, Button, Modal } from 'react-native-paper'; 
 
 
 function evenlyItemizedScreen({route, navigation}) {
     const {img, container, text, button, textInput} = styles;
     const {user} = useContext(AuthenticatedUserContext);
     const { id } = route.params;
+    const [modalOpen, setModalOpen] = useState(false);
 
     const chargerId = user.uid;
     const getMostRecent = async () => {
@@ -59,27 +60,22 @@ function evenlyItemizedScreen({route, navigation}) {
     const tempNumber = people => {
       setTempPeople(people); 
     }
-  
-    const clickHandler = () => {
-        //need to add additional functionality later
-    }
+
     //the evenly button takes numPeople set in state and calls the splitFunctionaly function
     const evenlyButton = () =>{
-      
-        return (
+      return (
         <Button color='#000029' onPress={getMostRecent} mode='contained'>
           <Text>Evenly</Text>
         </Button>
-        
-        )
+      )
     }
     //this button has no function yet
     const itemizedButton = () =>{
-        return(
-        <Button color='#000029' onPress={clickHandler}  mode='contained'>
+      return(
+        <Button color='#000029' onPress={showModal}  mode='contained'>
           <Text>Itemized</Text>
         </Button>
-        )
+      )
     }
     return (
       <TouchableWithoutFeedback onPress={ () => Keyboard.dismiss() }>

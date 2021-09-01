@@ -16,7 +16,7 @@ import {
     Lato_900Black,
     Lato_900Black_Italic,
   } from '@expo-google-fonts/lato';
-import {TextInput, Button} from 'react-native-paper'; 
+import {TextInput, Button, Modal, Chip} from 'react-native-paper'; 
 
 
 function evenlyItemizedScreen({route, navigation}) {
@@ -36,14 +36,13 @@ function evenlyItemizedScreen({route, navigation}) {
 
       totalPrice = data.items.find(
         ({description}) => description === 'total' || description === 'TOTAL' || description === 'Total');
-      let ppCharge =  splitFunctionality()
+      let perPersonCharge =  splitFunctionality()
       
-      const chargees = new Array(Number(numPeople.current)).fill({name: 'chargee', amountOwed: ppCharge});
+      const chargees = new Array(Number(numPeople.current)).fill({name: 'chargee', amountOwed: perPersonCharge});
       navigation.navigate('AmountOwed', {chargeesProp: chargees, id: id});
     }
 
-    let totalPrice
-  
+    let totalPrice;
     const splitFunctionality = () => {
       numPeople.current = tempPeople;
       let split = totalPrice.price / numPeople.current;
@@ -63,23 +62,24 @@ function evenlyItemizedScreen({route, navigation}) {
     const clickHandler = () => {
         //need to add additional functionality later
     }
+
+
     //the evenly button takes numPeople set in state and calls the splitFunctionaly function
     const evenlyButton = () =>{
-      
-        return (
+      return (
         <Button color='#000029' onPress={getMostRecent} mode='contained'>
           <Text>Evenly</Text>
         </Button>
-        
-        )
+      )
     }
+
     //this button has no function yet
     const itemizedButton = () =>{
-        return(
+      return(
         <Button color='#000029' onPress={clickHandler}  mode='contained'>
           <Text>Itemized</Text>
         </Button>
-        )
+      )
     }
     return (
       <TouchableWithoutFeedback onPress={ () => Keyboard.dismiss() }>

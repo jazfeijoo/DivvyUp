@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {StyleSheet, Text, View, ImageBackground, FlatList} from 'react-native';
+import {StyleSheet, Text, View, ImageBackground, FlatList, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import {TextInputMask} from 'react-native-masked-text';
 import {auth} from '../config/firebase';
 import {AuthenticatedUserContext} from '../navigation/AuthenticatedUserProvider';
@@ -42,6 +42,7 @@ export default EditReceipt = ({route, navigation}) => {
 
   function listItems() {
     return (
+    <TouchableWithoutFeedback onPress={ () => Keyboard.dismiss() }>
       <View>
         <View style={list}>
           <FlatList
@@ -73,6 +74,7 @@ export default EditReceipt = ({route, navigation}) => {
                     }}
                     value={item.price}
                     onChangeText={newPrice => updateItemPrice(item, newPrice)}
+                    keyboardType="decimal-pad"
                   />
                 </View>
               );
@@ -80,6 +82,7 @@ export default EditReceipt = ({route, navigation}) => {
           />
         </View>
       </View>
+    </TouchableWithoutFeedback>
     );
   }
 

@@ -68,10 +68,10 @@ const Itemized = ({route, navigation}) => {
   };
 
   // AN Integrating Jo's function to send the receipt back to the firestore.
-
-  let submittedReceipt
   const submitReceipt = async () => {
-    submittedReceipt = await db.collection('receipts').add({
+    const submittedReceipt = await db
+    .collection('receipts')
+    .add({
       ...acceptedReceipt.current,
       charger: `${user.uid}`,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),

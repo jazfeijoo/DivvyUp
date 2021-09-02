@@ -40,6 +40,7 @@ const Receipt = ({navigation}) => {
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [googleResponse, setGoogleResponse] = useState(null);
+
   // Deconstructing stylesheet.
   const {
     container,
@@ -49,6 +50,7 @@ const Receipt = ({navigation}) => {
     viewReceiptDetail,
     scrollViewContainer,
   } = styles;
+
   // Instead of ComponentDidMount, I will use useEffect for CameraPermissions.
   useEffect(() => {
     // Here I'm requesting permission to use the camera of the user.
@@ -59,9 +61,12 @@ const Receipt = ({navigation}) => {
     // I'm inputting false as a parameter because I don't need write-only permissions.
     ImagePicker.requestMediaLibraryPermissionsAsync(false);
   }, []);
+
+
+
   // Rendering the Overlay - basically this is formatting stuff.
   const _maybeRenderUploadingOverlay = () => {
-    if (uploading) {
+    // if (uploading) {
       return (
         <View
           style={[
@@ -75,15 +80,15 @@ const Receipt = ({navigation}) => {
           <ActivityIndicator color="#fff" animating size="large" />
         </View>
       );
-    }
+    // }
   };
   // This is rendering the image.
   const _maybeRenderImage = () => {
     // Deconstructing image and google response from this.state.
     // However, if there is no image, do nothing.
-    if (!image) {
-      return;
-    }
+    // if (!image) {
+    //   return;
+    // }
     // If there is one, then style it and render.
     return (
       <View
@@ -97,7 +102,7 @@ const Receipt = ({navigation}) => {
         <Button
           mode="contained"
           style={processReceiptButton}
-          onPress={() => submitToGoogle()}>
+          onPress={() => fetchSubmitToGoogle()}>
           Process Receipt
         </Button>
         <View
@@ -108,7 +113,7 @@ const Receipt = ({navigation}) => {
             shadowOpacity: 0.2,
             shadowOffset: {width: 4, height: 4},
             shadowRadius: 5,
-            overflow: 'hidden',
+            overflow: 'visible',
           }}>
           <Image source={{uri: image}} style={{width: 250, height: 250}} />
         </View>
@@ -116,10 +121,11 @@ const Receipt = ({navigation}) => {
     );
   };
 
-  const _maybeRenderViewItemizedDisplay = () => {
-    if (googleResponse === null) {
-      return null;
-    }
+
+  const _maybeRenderViewReceipt = () => {
+    // if (!image) {
+    //   return;
+    // }
     return (
       <View>
         <Button
@@ -135,6 +141,7 @@ const Receipt = ({navigation}) => {
       </View>
     );
   };
+
 
   const _takePhoto = async () => {
     let pickerResult = await ImagePicker.launchCameraAsync({
@@ -152,6 +159,8 @@ const Receipt = ({navigation}) => {
     _handleImagePicked(pickerResult);
   };
 
+
+
   const _handleImagePicked = async pickerResult => {
     try {
       setUploading(true);
@@ -168,6 +177,8 @@ const Receipt = ({navigation}) => {
   };
   // So here's the important bit, this is where you talk to google.
   // You get charged by feature you use from google.
+
+
   const submitToGoogle = async () => {
     try {
       setUploading(true);
@@ -211,6 +222,7 @@ const Receipt = ({navigation}) => {
       let responseJson = await response.json();
       setGoogleResponse(responseJson);
       setUploading(false);
+      console.log('SET GOOGLE RESPONSE: ', googleResponse)
     } catch (error) {
       console.log(error);
     }
@@ -257,15 +269,17 @@ const Receipt = ({navigation}) => {
         {/* Displaying our user and ability to logout */}
         <HomeScreen />
         <ScrollView contentContainerStyle={scrollViewContainer}>
-          <Button style={button} mode="contained" onPress={() => _pickImage()}>
-            Select Receipt From Camera Roll
-          </Button>
-          <Button style={button} mode="contained" onPress={() => _takePhoto()}>
-            Take A Photo Of Receipt
-          </Button>
-          {_maybeRenderImage()}
-          {_maybeRenderUploadingOverlay()}
-          {_maybeRenderViewItemizedDisplay()}
+            <Button style={button} mode="contained" onPress={() => _pickImage()}>
+              Select Receipt From Camera Roll
+            </Button>
+            <Button style={button} mode="contained" onPress={() => _takePhoto()}>
+              Take A Photo Of Receipt
+            </Button>
+            <View>
+            {uploading? _maybeRenderUploadingOverlay() : _maybeRenderImage()}
+            </View>
+            { googleResponse?  _maybeRenderViewReceipt() : <Text >NO GOOGLE RESPONSE</Text>}
+            {/* {_maybeRenderViewItemizedDisplay()} */}
         </ScrollView>
       </ImageBackground>
     </View>
@@ -288,7 +302,8 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   scrollViewContainer: {
-    height: '65%',
+    marginTop: 60,
+    height: '85%',
     alignItems: 'center',
   },
   processReceiptButton: {

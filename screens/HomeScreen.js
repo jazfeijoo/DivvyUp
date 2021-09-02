@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
   emailAndLogoutPosition: {
     alignSelf: 'flex-end',
     marginRight: '5%',
+    margin: 40
   },
   text: {
     fontSize: 18,

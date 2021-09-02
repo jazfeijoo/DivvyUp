@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   header: {
     padding: 5,
     flex: 1,
+    marginBottom: 10
   },
   text: {
     fontSize: 65,

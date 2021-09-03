@@ -12,6 +12,7 @@ import { db } from '../config/firebase';
 
 const AmountOwed = ({ route }) => {
   const { chargeesProp, id } = route.params;
+  console.log('in amountOwed');
 
   const updateChargees = async () => {
     await db

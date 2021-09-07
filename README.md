@@ -4,7 +4,9 @@
 
 A mobile app that splits the bill for you. Just take a picture of your receipt, add number of people & method of splitting, and submit your charge requests. 
 
-[![DIVVYUP](https://img.youtube.com/vi/ELzlQQO5194/hqdefault.jpg)](https://www.youtube.com/watch?v=ELzlQQO5194 "DIVVYUP")
+
+![DIVVYUP](https://media4.giphy.com/media/F3h73GOVHrHg6mOrJG/giphy.gif?cid=790b761194b84cdd79b03e461446e5678df179bd1e0c7198&rid=giphy.gif&ct=g)
+
 
 ## Testing 
 

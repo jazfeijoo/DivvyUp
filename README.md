@@ -4,6 +4,8 @@
 
 A mobile app that splits the bill for you. Just take a picture of your receipt, add number of people & method of splitting, and submit your charge requests. 
 
+(https://www.youtube.com/watch?v=ELzlQQO5194)
+
 ## Testing 
 
 npm install

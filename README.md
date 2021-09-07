@@ -2,7 +2,7 @@
 
 ## Description
 
-A mobile app that splits the bill for you. Just take a picture of your receipt, add number of people & method of splitting, and submit your charges requests. 
+A mobile app that splits the bill for you. Just take a picture of your receipt, add number of people & method of splitting, and submit your charge requests. 
 
 ## Testing 
 
@@ -30,7 +30,6 @@ npm install
   * Expo camera for accessing device photo gallery & camera
   * Expo to quick start the app and test in real time
   * Google Vision API for OCR text recognition
-  * Ngrok for deployment 
 
 ## Next steps  
 * Implement a History screen where users can see a list of all their previous receipts & their charge statuses  

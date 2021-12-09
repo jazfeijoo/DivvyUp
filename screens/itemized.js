@@ -28,17 +28,19 @@ const Itemized = ({route, navigation}) => {
 
   //   AN: This will display the items on the screen if receiptdata was properly parsed.
   const displayItemized = () => {
+    console.log('RETURN RECEIPT AS:',parsedData)
     if (receiptData === null) {
       return null;
     } else {
       return (
         <View>
-          {parsedData.map((itemObject, index) => (
-            <DataTable.Row key={index}>
-              <DataTable.Cell>{itemObject.words.join(' ')}</DataTable.Cell>
+          {parsedData.map((itemObject) => (
+            <DataTable.Row key={parsedData.indexOf(itemObject)}>
+              <DataTable.Cell>{itemObject.words}</DataTable.Cell>
               <DataTable.Cell numeric>{itemObject.price}</DataTable.Cell>
             </DataTable.Row>
           ))}
+          {/* <h4>{parsedData}</h4> */}
         </View>
       );
     }

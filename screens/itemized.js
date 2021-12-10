@@ -4,6 +4,7 @@ import React, {useContext, useState, useRef} from 'react';
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 // Importing my receipt parser function to use when someone navigates to this page.
 import {receiptParser} from '../utilities/receiptParser';
+import {receiptParserXY} from '../utilities/receiptParserXY'
 // Importing react native paper elements to be used for styling.
 import {DataTable, Button} from 'react-native-paper';
 // Importing firebase per Jazmin's code on sending back the finalized receipt.
@@ -18,6 +19,7 @@ const Itemized = ({route, navigation}) => {
   const {receiptData} = route.params;
   // This is my parsed receipt.
   let parsedData = receiptParser(receiptData.responses);
+  let parsedDataXY = receiptParserXY(receiptData)
   // Setting user object.
   const {user} = useContext(AuthenticatedUserContext)
     ? useContext(AuthenticatedUserContext)
@@ -28,7 +30,8 @@ const Itemized = ({route, navigation}) => {
 
   //   AN: This will display the items on the screen if receiptdata was properly parsed.
   const displayItemized = () => {
-    console.log('RETURN RECEIPT AS:',parsedData)
+    console.log('OLD RECEIPT:',parsedData)
+    console.log('NEW RECEIPT:',parsedDataXY)
     if (receiptData === null) {
       return null;
     } else {

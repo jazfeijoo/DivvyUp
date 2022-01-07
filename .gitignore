@@ -9,7 +9,6 @@ npm-debug.*
 *.orig.*
 web-build/
 secret.js
-receiptParserXY.js
 
 # macOS
 .DS_Store

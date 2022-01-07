@@ -83,10 +83,11 @@ const Receipt = ({navigation}) => {
             body: body,
           },
         );
+        console.log('RESPONSE FROM GOOGLE:', response)
         let responseJson = await response.json();
         setGoogleResponse(responseJson);
         setProcessing(false);
-        console.log('SET GOOGLE RESPONSE: ', googleResponse)
+       // console.log('SET GOOGLE RESPONSE: ', googleResponse)
       } catch (error) {
         console.log(error);
       }

@@ -19,31 +19,36 @@ const Itemized = ({route, navigation}) => {
   const {receiptData} = route.params;
   // This is my parsed receipt.
   let parsedData = receiptParser(receiptData.responses);
-  let parsedDataXY = receiptParserXY(receiptData)
+  let parsedDataXY = receiptParserXY(receiptData.responses)
   // Setting user object.
   const {user} = useContext(AuthenticatedUserContext)
     ? useContext(AuthenticatedUserContext)
     : 'NO USER!';
   // Here I'm using useState, changing the names of my items to the same naming convention as Jazz.
-  const [receipt, setReceipt] = useState(parsedData);
+  const [receipt, setReceipt] = useState(parsedDataXY);
   const acceptedReceipt = useRef(null);
-
-  //   AN: This will display the items on the screen if receiptdata was properly parsed.
   const displayItemized = () => {
-    console.log('OLD RECEIPT:',parsedData)
-    console.log('NEW RECEIPT:',parsedDataXY)
+    // console.log('OLD RECEIPT:',parsedData)
+     console.log('NEW RECEIPT:',parsedDataXY)
+     console.log('TOTAL IS:', parsedDataXY['total'], 'OR:',parsedDataXY.total)
     if (receiptData === null) {
       return null;
     } else {
+
       return (
         <View>
-          {parsedData.map((itemObject) => (
-            <DataTable.Row key={parsedData.indexOf(itemObject)}>
-              <DataTable.Cell>{itemObject.words}</DataTable.Cell>
-              <DataTable.Cell numeric>{itemObject.price}</DataTable.Cell>
+          {parsedDataXY.items.map((item, index) => (
+            <DataTable.Row key={index}>
+              <DataTable.Cell style={{paddingRight: 30, alignContent: 'flex-start'}} numeric>{item.quantity}</DataTable.Cell>
+              <DataTable.Cell>{item.description.join(' ').trim()}</DataTable.Cell>
+              <DataTable.Cell numeric>{item.price}</DataTable.Cell>
             </DataTable.Row>
           ))}
-          {/* <h4>{parsedData}</h4> */}
+            <DataTable.Row>
+              <DataTable.Cell style={{paddingRight: 30, alignContent: 'flex-start'}} numeric></DataTable.Cell>
+              <DataTable.Cell style={{fontWeight: 'bold'}} > Total Cost</DataTable.Cell>
+              <DataTable.Cell numeric>{parsedDataXY['total'][0].description}</DataTable.Cell>
+            </DataTable.Row>
         </View>
       );
     }
@@ -131,17 +136,24 @@ const Itemized = ({route, navigation}) => {
     navigation.navigate('EditReceipt', {receipt});
   };
 
-  //   AN: This is what will be displayed on the screen.  Using react native paper because it's cute.
+  const name = parsedDataXY.name.map((obj) => {
+    return obj.description
+  }).join(' ')
+
   return (
     <View style={container}>
       <ScrollView>
+        <View>
+          <Text style={{fontSize: 35, textAlign: 'center'}}>{name}</Text> 
+        </View>
         <DataTable>
-          <DataTable.Header>
-            <DataTable.Title>Item/Meal</DataTable.Title>
-            <DataTable.Title numeric>Cost</DataTable.Title>
-          </DataTable.Header>
+            <DataTable.Header>
+              <DataTable.Title style={{paddingRight: 30, alignContent: 'flex-start'}} numeric>Quantity</DataTable.Title>
+              <DataTable.Title>Item/Meal</DataTable.Title>
+              <DataTable.Title numeric>Cost</DataTable.Title>
+            </DataTable.Header>
+            {displayItemized()}
         </DataTable>
-        {displayItemized()}
         <View style={bottom}>
           {acceptButton()}
           {editButton()}
@@ -156,8 +168,7 @@ export default Itemized;
 // AN Basic Styling - will be updated eventually.
 const styles = StyleSheet.create({
   container: {
-    marginTop: 60,
-    flex: 1,
+    flex: 1
   },
   bottom: {
     marginBottom: 12,
@@ -168,5 +179,5 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: 'rgb(227, 100, 20)',
-  },
+  }
 });

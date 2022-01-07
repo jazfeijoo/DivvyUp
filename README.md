@@ -1,10 +1,9 @@
-# DIVVYUP.
+# DIVVYUP - Solo 
 
 ## Description
 
 A mobile app that splits the bill for you. Just take a picture of your receipt, add number of people & method of splitting, and submit your charge requests.
-
-![DIVVYUP](https://media4.giphy.com/media/F3h73GOVHrHg6mOrJG/giphy.gif?cid=790b761194b84cdd79b03e461446e5678df179bd1e0c7198&rid=giphy.gif&ct=g)
+This is a forked version where I worked on creating an improved receipt parser. The original receipt parsing function, only referenced the x-axis to parse the Google Vision API receipt data. This created limitations to our original app. The original receipt parser could only accept basic receipt formats and could not identify additional information such as the name of the businesss, total cost, and date/time. The receipt parsing function I coded uses both the x-axis and y-axis in order to collect more datapoints and accept more complex receipt formats.   
 
 ## Testing
 
@@ -34,19 +33,3 @@ npm install
 - Expo to quick start the app and test in real time
 - Google Vision API for OCR text recognition
 
-## Next steps
-
-- Implement a History screen where users can see a list of all their previous receipts & their charge statuses
-- Integrate PayPal and Stripe APIs to enable sending and receiving payments
-- Build a notification system to send new charge requests, to remind users of outstanding charge requests, and to confirm payments
-- Add a toggle for users to mark a receipt as settled
-
-## Team
-
-Anjali Nainani | https://github.com/anjinai | https://www.linkedin.com/in/anjali-nainani
-
-Jazmin Feijoo | https://github.com/jazfeijoo | https://www.linkedin.com/in/jazminfeijoo
-
-Josephine Wang | https://github.com/joseewang | https://www.linkedin.com/in/joseewang
-
-Margareth Borba | https://github.com/mborba1 | https://www.linkedin.com/in/margarethborba/
